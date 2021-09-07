@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Faces</title>
+    <script defer src="./js/face-api.min.js"></script>
+    <script defer src="register.js"></script>
+    <style>
+      body {
+        height: 99vh;
+        width: 99vw;
+        background-color: #000;
+      }
+
+      #video-element {
+        height: 100%;
+        width: 100%;
+      }
+
+      #buttons-container {
+        position: absolute;
+        top: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+
+      .button {
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background-color: royalblue;
+        color: white;
+        padding: 10px 15px;
+        font-size: 15px;
+        border-radius: 5px;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="video-element"></video>
+    <div id="buttons-container">
+      <button id="take-picture" class="button">Take Picture</button>
+      <button id="done" class="button">Done</button>
+    </div>
+  </body>
+</html>
