@@ -1,9 +1,9 @@
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("/"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("/"),
-  faceapi.nets.faceRecognitionNet.loadFromUri("/"),
-  faceapi.nets.faceExpressionNet.loadFromUri("/"),
-  faceapi.nets.ssdMobilenetv1.loadFromUri("/"),
+  faceapi.nets.tinyFaceDetector.loadFromUri("Face_Recognition/"),
+  faceapi.nets.faceLandmark68Net.loadFromUri("Face_Recognition/"),
+  faceapi.nets.faceRecognitionNet.loadFromUri("Face_Recognition/"),
+  faceapi.nets.faceExpressionNet.loadFromUri("Face_Recognition/"),
+  faceapi.nets.ssdMobilenetv1.loadFromUri("/Face_Recognition"),
 ]).then(() => console.log("Face API is ready!"));
 
 const Notifier = getNotifier();
