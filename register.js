@@ -82,6 +82,16 @@ function getNotifier() {
           })
         );
       },
+      trainingStart: function () {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "training_start" })
+        );
+      },
+      trainingFinish: function () {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "training_finish" })
+        );
+      },
     };
   } else {
     return {
@@ -103,11 +113,13 @@ doneBtn.addEventListener("click", async (e) => {
   if (Object.keys(data).length > 0) {
     doneBtn.disabled = true;
     Notifier.showNotification(0, "Training started...");
+    Notifier.trainingStart();
     const labeledFaceDescriptors = await loadLabeledImages();
     const faces = labeledFaceDescriptors.map((item) => item.toJSON());
     faces && Notifier.sendData(JSON.stringify(faces));
     // Object.values(data).map((item) => window.URL.revokeObjectURL(item));
     doneBtn.disabled = false;
+    Notifier.trainingFinish();
     Notifier.showNotification(0, "Training finished...");
   } else {
     Notifier.showNotification(2, "There are no pictures taken!");
