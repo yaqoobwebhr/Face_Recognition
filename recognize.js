@@ -122,7 +122,7 @@ function getNotifier() {
   }
 }
 
-document.addEventListener("message", async (message) => {
+async function onMessage(message) {
   try {
     if (!startupDone) {
       // const div = document.createElement("div");
@@ -136,7 +136,13 @@ document.addEventListener("message", async (message) => {
     Notifier.showNotification(3, "Error from webview!");
     Notifier.sendError(error.message);
   }
-});
+}
+
+if (navigator.userAgent.indexOf("Chrome") != -1) {
+  document.addEventListener("message", onMessage);
+} else {
+  window.addEventListener("message", onMessage);
+}
 
 async function start() {
   if (!window.ReactNativeWebView) {
