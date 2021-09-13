@@ -124,8 +124,6 @@ function getNotifier() {
 
 document.addEventListener("message", async (message) => {
   try {
-    alert(JSON.stringify(message.data));
-    Notifier.sendData({ msg: "Received something!!" });
     if (!startupDone) {
       // const div = document.createElement("div");
       // div.id = "logs";
