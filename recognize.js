@@ -122,7 +122,7 @@ function getNotifier() {
   }
 }
 
-window.addEventListener("message", async (message) => {
+document.addEventListener("message", async (message) => {
   try {
     alert(JSON.stringify(message.data));
     Notifier.sendData({ msg: "Received something!!" });
