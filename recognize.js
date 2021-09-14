@@ -52,7 +52,10 @@ async function startup(faces) {
     container.append(canvas);
 
     const detections = await faceapi
-      .detectSingleFace(video)
+      .detectAllFaces(
+        video,
+        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.8 })
+      )
       .withFaceLandmarks()
       .withFaceDescriptors();
 
@@ -118,9 +121,6 @@ function getNotifier() {
       showNotification: function (type, message) {
         alert(message);
       },
-      sendData: function (data) {
-        localStorage.setItem("data", data);
-      },
     };
   }
 }
@@ -128,10 +128,6 @@ function getNotifier() {
 async function onMessage(message) {
   try {
     if (!startupDone) {
-      // const div = document.createElement("div");
-      // div.id = "logs";
-      // div.innerHTML = message.data;
-      // document.body.append(div);
       await startup(JSON.parse(message.data));
       startupDone = true;
     }
