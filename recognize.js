@@ -52,7 +52,7 @@ async function startup(faces) {
     container.append(canvas);
 
     const detections = await faceapi
-      .detectAllFaces(video)
+      .detectSingleFace(video)
       .withFaceLandmarks()
       .withFaceDescriptors();
 
