@@ -64,9 +64,12 @@ async function startup(faces) {
       faceMatcher.findBestMatch(d.descriptor)
     );
 
-    Notifier.sendRecognitions(
-      results.map((item) => ({ label: item.label, distance: item.distance }))
-    );
+    const payload = results.map((item) => ({
+      label: item.label,
+      distance: item.distance,
+    }));
+
+    if (payload.length > 0) Notifier.sendRecognitions(payload);
 
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
