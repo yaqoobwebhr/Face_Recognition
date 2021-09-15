@@ -4,7 +4,11 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/Face_Recognition"),
   faceapi.nets.faceExpressionNet.loadFromUri("/Face_Recognition"),
   faceapi.nets.ssdMobilenetv1.loadFromUri("/Face_Recognition"),
-]).then(() => console.log("Face API is ready!"));
+])
+  .then(() => getStream())
+  .catch((error) => {
+    Notifier.sendError("Errors loading models...");
+  });
 
 const Notifier = getNotifier();
 
@@ -82,6 +86,11 @@ function getNotifier() {
           })
         );
       },
+      sendError: function (error) {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({ type: "error", error })
+        );
+      },
       trainingStart: function () {
         window.ReactNativeWebView.postMessage(
           JSON.stringify({ type: "training_start" })
@@ -108,21 +117,25 @@ function getNotifier() {
 takePicBtn.addEventListener("click", takePhoto);
 
 doneBtn.addEventListener("click", async (e) => {
-  e.preventDefault();
+  try {
+    e.preventDefault();
 
-  if (Object.keys(data).length > 0) {
-    doneBtn.disabled = true;
-    Notifier.showNotification(0, "Training started...");
-    Notifier.trainingStart();
-    const labeledFaceDescriptors = await loadLabeledImages();
-    const faces = labeledFaceDescriptors.map((item) => item.toJSON());
-    faces && Notifier.sendData(JSON.stringify(faces));
-    // Object.values(data).map((item) => window.URL.revokeObjectURL(item));
-    doneBtn.disabled = false;
-    Notifier.trainingFinish();
-    Notifier.showNotification(0, "Training finished...");
-  } else {
-    Notifier.showNotification(2, "There are no pictures taken!");
+    if (Object.keys(data).length > 0) {
+      doneBtn.disabled = true;
+      Notifier.showNotification(0, "Training started...");
+      Notifier.trainingStart();
+      const labeledFaceDescriptors = await loadLabeledImages();
+      const faces = labeledFaceDescriptors.map((item) => item.toJSON());
+      faces && Notifier.sendData(JSON.stringify(faces));
+      // Object.values(data).map((item) => window.URL.revokeObjectURL(item));
+      doneBtn.disabled = false;
+      Notifier.trainingFinish();
+      Notifier.showNotification(0, "Training finished...");
+    } else {
+      Notifier.showNotification(2, "There are no pictures taken!");
+    }
+  } catch (error) {
+    Notifier.sendError("Error in training faces!");
   }
 });
 
@@ -144,5 +157,3 @@ function loadLabeledImages() {
     })
   );
 }
-
-getStream();
