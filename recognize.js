@@ -52,7 +52,10 @@ async function startup(faces) {
     container.append(canvas);
 
     const detections = await faceapi
-      .detectAllFaces(video)
+      .detectAllFaces(
+        video,
+        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
+      )
       .withFaceLandmarks()
       .withFaceDescriptors();
 
