@@ -4,9 +4,12 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/Face_Recognition"),
   faceapi.nets.faceExpressionNet.loadFromUri("/Face_Recognition"),
   faceapi.nets.ssdMobilenetv1.loadFromUri("/Face_Recognition"),
-]).then(() => console.log("Face API is ready!"));
+])
+  .then(() => console.log("Face API is ready!"))
+  .catch((error) => {
+    Emitter.emit(Events.ERROR, { error: "Errors loading models" });
+  });
 
-const Notifier = getNotifier();
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
@@ -59,8 +62,6 @@ async function startup(faces) {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
-    // console.log(detections);
-
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
     const results = resizedDetections.map((d) =>
@@ -72,7 +73,7 @@ async function startup(faces) {
       distance: item.distance,
     }));
 
-    if (payload.length > 0) Notifier.sendRecognitions(payload);
+    if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
@@ -85,46 +86,6 @@ async function startup(faces) {
   }, 500);
 }
 
-function getNotifier() {
-  if (window.ReactNativeWebView) {
-    return {
-      sendRecognitions: function (data) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "face_found", data })
-        );
-      },
-      sendError: function (error) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "error", error })
-        );
-      },
-      showNotification: function (type, message) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            type: "notification",
-            notificationType: type,
-            message,
-          })
-        );
-      },
-      sendData: function (data) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            type: "data",
-            data: data,
-          })
-        );
-      },
-    };
-  } else {
-    return {
-      showNotification: function (type, message) {
-        alert(message);
-      },
-    };
-  }
-}
-
 async function onMessage(message) {
   try {
     if (!startupDone) {
@@ -132,8 +93,11 @@ async function onMessage(message) {
       startupDone = true;
     }
   } catch (error) {
-    Notifier.showNotification(3, "Error from webview!");
-    Notifier.sendError(error.message);
+    Emitter.emit(Events.NOTIFICATION, {
+      notificationType: 3,
+      message: "Error from webview!",
+    });
+    Emitter.emit(Events.ERROR, { error: error.message });
   }
 }
 

@@ -1,9 +1,20 @@
-var Notificier = {
-  showNotification: function (text) {
-    const notification = document.createElement("div");
-    notification.id = "notification";
-    notification.className = "show";
-    notification.innerHTML = `${text}`;
-    document.body.appendChild(notification);
+var Events = {
+  NOTIFICATION: "notification",
+  DATA: "data",
+  FACE_FOUND: "face_found",
+  ERROR: "error",
+  TRAINING_START: "training_start",
+  TRAINING_FINISH: "training_finish",
+};
+
+var Emitter = {
+  emit: function (type, payload = {}) {
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type, ...payload })
+      );
+    } else {
+      alert("Event: " + type + " Data: " + JSON.stringify(payload));
+    }
   },
 };

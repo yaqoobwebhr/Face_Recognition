@@ -7,10 +7,8 @@ Promise.all([
 ])
   .then(() => getStream())
   .catch((error) => {
-    Notifier.sendError("Errors loading models...");
+    Emitter.emit(Events.ERROR, { error: "Errors loading models" });
   });
-
-const Notifier = getNotifier();
 
 let stream;
 let data = {};
@@ -43,75 +41,13 @@ async function takePhoto() {
       data[label] = [picURL];
     }
 
-    Notifier.showNotification(1, "Photo has been captured!");
-
+    Emitter.emit(Events.NOTIFICATION, {
+      notificationType: 1,
+      message: "Photo has been captured!",
+    });
+    // Notifier.showNotification(1, "Photo has been captured!");
     console.log("Picture Taken!", data);
-    // // Get Label
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const label = urlParams.get("id") || "unknown";
-    // // Prepare Image
-    // const image = document.createElement("img");
-    // image.src = window.URL.createObjectURL(blob);
-    // const descriptions = [];
-    // const detections = await faceapi
-    //   .detectSingleFace(image)
-    //   .withFaceLandmarks()
-    //   .withFaceDescriptor();
-    // descriptions.push(detections.descriptor);
-    // const labeledFaceDescriptors = new faceapi.LabeledFaceDescriptors(
-    //   label,
-    //   descriptions
-    // );
-    // console.log(labeledFaceDescriptors);
   });
-}
-
-function getNotifier() {
-  if (window.ReactNativeWebView) {
-    return {
-      showNotification: function (type, message) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            type: "notification",
-            notificationType: type,
-            message,
-          })
-        );
-      },
-      sendData: function (data) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            type: "data",
-            data: data,
-          })
-        );
-      },
-      sendError: function (error) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "error", error })
-        );
-      },
-      trainingStart: function () {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "training_start" })
-        );
-      },
-      trainingFinish: function () {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({ type: "training_finish" })
-        );
-      },
-    };
-  } else {
-    return {
-      showNotification: function (type, message) {
-        alert(message);
-      },
-      sendData: function (data) {
-        localStorage.setItem("data", data);
-      },
-    };
-  }
 }
 
 takePicBtn.addEventListener("click", takePhoto);
@@ -122,20 +58,32 @@ doneBtn.addEventListener("click", async (e) => {
 
     if (Object.keys(data).length > 0) {
       doneBtn.disabled = true;
-      Notifier.showNotification(0, "Training started...");
-      Notifier.trainingStart();
+      Emitter.emit(Events.NOTIFICATION, {
+        notificationType: 0,
+        message: "Training started...",
+      });
+      Emitter.emit(Events.TRAINING_START);
+
       const labeledFaceDescriptors = await loadLabeledImages();
       const faces = labeledFaceDescriptors.map((item) => item.toJSON());
-      faces && Notifier.sendData(JSON.stringify(faces));
+      faces && Emitter.emit(Events.DATA, { data: JSON.stringify(faces) });
       // Object.values(data).map((item) => window.URL.revokeObjectURL(item));
       doneBtn.disabled = false;
-      Notifier.trainingFinish();
-      Notifier.showNotification(0, "Training finished...");
+      Emitter.emit(Events.TRAINING_FINISH);
+      Emitter.emit(Events.NOTIFICATION, {
+        notificationType: 0,
+        message: "Training finished...",
+      });
     } else {
-      Notifier.showNotification(2, "There are no pictures taken!");
+      Emitter.emit(Events.NOTIFICATION, {
+        notificationType: 2,
+        message: "There are no pictures taken!",
+      });
     }
   } catch (error) {
-    Notifier.sendError("Error in training faces!" + "Error: " + error.message);
+    Emitter.emit(Events.ERROR, {
+      error: "Error in training faces!" + "Error: " + error.message,
+    });
   }
 });
 
