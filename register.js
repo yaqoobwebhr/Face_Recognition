@@ -154,7 +154,9 @@ function loadLabeledImages() {
           )
           .withFaceLandmarks()
           .withFaceDescriptor();
-        descriptions.push(detections.descriptor);
+        if (detections) {
+          descriptions.push(detections.descriptor);
+        }
       }
       return new faceapi.LabeledFaceDescriptors(label, descriptions);
     })
