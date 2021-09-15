@@ -135,7 +135,7 @@ doneBtn.addEventListener("click", async (e) => {
       Notifier.showNotification(2, "There are no pictures taken!");
     }
   } catch (error) {
-    Notifier.sendError("Error in training faces!");
+    Notifier.sendError("Error in training faces!" + "Error: " + error.message);
   }
 });
 
