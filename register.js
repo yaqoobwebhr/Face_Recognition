@@ -148,7 +148,10 @@ function loadLabeledImages() {
       for (let i = 0; i < item[1].length; i++) {
         const img = await faceapi.fetchImage(item[1][i]);
         const detections = await faceapi
-          .detectSingleFace(img)
+          .detectSingleFace(
+            img,
+            new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
+          )
           .withFaceLandmarks()
           .withFaceDescriptor();
         descriptions.push(detections.descriptor);
