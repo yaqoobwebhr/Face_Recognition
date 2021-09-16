@@ -67,13 +67,7 @@ doneBtn.addEventListener("click", async (e) => {
       const labeledFaceDescriptors = await loadLabeledImages();
       const faces = labeledFaceDescriptors.map((item) => item.toJSON());
       faces && Emitter.emit(Events.DATA, { data: JSON.stringify(faces) });
-      // Object.values(data).map((item) => window.URL.revokeObjectURL(item));
       doneBtn.disabled = false;
-      Emitter.emit(Events.TRAINING_FINISH);
-      Emitter.emit(Events.NOTIFICATION, {
-        notificationType: 0,
-        message: "Training finished...",
-      });
     } else {
       Emitter.emit(Events.NOTIFICATION, {
         notificationType: 2,
