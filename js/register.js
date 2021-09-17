@@ -13,8 +13,6 @@ Promise.all([
 let stream;
 let data = {};
 const video = document.getElementById("video-element");
-const takePicBtn = document.getElementById("take-picture");
-const doneBtn = document.getElementById("done");
 
 async function getStream() {
   stream = await navigator.mediaDevices.getUserMedia({
@@ -50,12 +48,8 @@ async function takePhoto() {
   });
 }
 
-takePicBtn.addEventListener("click", takePhoto);
-
-doneBtn.addEventListener("click", async (e) => {
+async function train() {
   try {
-    e.preventDefault();
-
     if (Object.keys(data).length > 0) {
       doneBtn.disabled = true;
       Emitter.emit(Events.TRAINING_START);
@@ -74,7 +68,22 @@ doneBtn.addEventListener("click", async (e) => {
       error: "Error in training faces!" + "Error: " + error.message,
     });
   }
-});
+}
+
+async function onMessage(message) {
+  let payload = JSON.parse(message.data);
+
+  switch (payload.type) {
+    case Events.TAKE_PHOTO:
+      takePhoto();
+      break;
+    case Events.DONE_PRESS:
+      train();
+      break;
+    default:
+      break;
+  }
+}
 
 function loadLabeledImages() {
   return Promise.all(
@@ -98,4 +107,10 @@ function loadLabeledImages() {
       return new faceapi.LabeledFaceDescriptors(label, descriptions);
     })
   );
+}
+
+if (navigator.userAgent.indexOf("Chrome") != -1) {
+  document.addEventListener("message", onMessage);
+} else {
+  window.addEventListener("message", onMessage);
 }

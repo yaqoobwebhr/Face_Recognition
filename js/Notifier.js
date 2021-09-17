@@ -5,6 +5,8 @@ var Events = {
   ERROR: "error",
   TRAINING_START: "training_start",
   TRAINING_FINISH: "training_finish",
+  TAKE_PHOTO: "take_photo",
+  DONE_PRESS: "done_press",
 };
 
 var Emitter = {
