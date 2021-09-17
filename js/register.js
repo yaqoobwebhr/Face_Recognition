@@ -51,12 +51,10 @@ async function takePhoto() {
 async function train() {
   try {
     if (Object.keys(data).length > 0) {
-      doneBtn.disabled = true;
       Emitter.emit(Events.TRAINING_START);
       const labeledFaceDescriptors = await loadLabeledImages();
       const faces = labeledFaceDescriptors.map((item) => item.toJSON());
       faces && Emitter.emit(Events.DATA, { data: JSON.stringify(faces) });
-      doneBtn.disabled = false;
     } else {
       Emitter.emit(Events.NOTIFICATION, {
         notificationType: 2,
