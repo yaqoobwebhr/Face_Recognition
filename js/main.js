@@ -82,11 +82,22 @@ const recognizeObserver = new MutationObserver(async function (
           displaySize
         );
 
-        const results = resizedDetections.map((d) => {
-          faceMatcher.findBestMatch(d.descriptor);
-          faceMatcher.matchDescriptor(d.descriptor);
-        });
+        const results = resizedDetections.map((d) =>
+          faceMatcher.findBestMatch(d.descriptor)
+        );
         results.forEach((result, i) => {
+          const box = resizedDetections[i].detection.box;
+          const drawBox = new faceapi.draw.DrawBox(box, {
+            label: result.toString(),
+          });
+
+          drawBox.draw(canvas);
+        });
+
+        const results2 = resizedDetections.map((d) =>
+          faceMatcher.matchDescriptor(d.descriptor)
+        );
+        results2.forEach((result, i) => {
           const box = resizedDetections[i].detection.box;
           const drawBox = new faceapi.draw.DrawBox(box, {
             label: result.toString(),
