@@ -45,31 +45,10 @@ const recognizeObserver = new MutationObserver(async function (
 
     const faces = JSON.parse(localStorage.getItem(LS_KEY));
 
-    // const labeledFaceDescriptors = faces.map((item) =>
-    //   faceapi.LabeledFaceDescriptors.fromJSON(item)
-    // );
-    const labeledFaceDescriptors = await Promise.all(
-      labels.map(async (label) => {
-        // fetch image data from urls and convert blob to HTMLImage element
-        const imgUrl = `${label}.png`;
-        const img = await faceapi.fetchImage(imgUrl);
-
-        // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-        const fullFaceDescription = await faceapi
-          .detectSingleFace(img)
-          .withFaceLandmarks()
-          .withFaceDescriptor();
-
-        if (!fullFaceDescription) {
-          throw new Error(`no faces detected for ${label}`);
-        }
-
-        const faceDescriptors = [fullFaceDescription.descriptor];
-        return new faceapi.LabeledFaceDescriptors(label, faceDescriptors);
-      })
+    const labeledFaceDescriptors = faces.map((item) =>
+      faceapi.LabeledFaceDescriptors.fromJSON(item)
     );
-
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
 
     const videoTrack = recognizeFaceStream.getVideoTracks()[0];
     const imageCapture = new ImageCapture(videoTrack);
