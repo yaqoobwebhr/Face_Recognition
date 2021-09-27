@@ -84,7 +84,7 @@ const recognizeObserver = new MutationObserver(async function (
 
         const results = resizedDetections.map((d) => {
           faceMatcher.findBestMatch(d.descriptor);
-          faceMatcher.faceMatcher(d.descriptor);
+          faceMatcher.matchDescriptor(d.descriptor);
         });
         results.forEach((result, i) => {
           const box = resizedDetections[i].detection.box;
