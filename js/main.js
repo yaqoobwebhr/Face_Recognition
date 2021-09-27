@@ -81,16 +81,10 @@ const recognizeObserver = new MutationObserver(async function (
           detections,
           displaySize
         );
-        const fullFaceDescription = await faceapi
-          .detectSingleFace(image)
-          .withFaceLandmarks()
-          .withFaceDescriptor();
-        const results = fullFaceDescription.map((fd) =>
-          faceMatcher.findBestMatch(fd.descriptor)
+
+        const results = resizedDetections.map((d) =>
+          faceMatcher.findBestMatch(d.descriptor)
         );
-        // const results = resizedDetections.map((d) =>
-        //   faceMatcher.findBestMatch(d.descriptor)
-        // );
         results.forEach((result, i) => {
           const box = resizedDetections[i].detection.box;
           const drawBox = new faceapi.draw.DrawBox(box, {
