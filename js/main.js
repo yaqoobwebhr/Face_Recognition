@@ -82,9 +82,10 @@ const recognizeObserver = new MutationObserver(async function (
           displaySize
         );
 
-        const results = resizedDetections.map((d) =>
-          faceMatcher.findBestMatch(d.descriptor)
-        );
+        const results = resizedDetections.map((d) => {
+          faceMatcher.findBestMatch(d.descriptor);
+          faceMatcher.faceMatcher(d.descriptor);
+        });
         results.forEach((result, i) => {
           const box = resizedDetections[i].detection.box;
           const drawBox = new faceapi.draw.DrawBox(box, {
