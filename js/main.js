@@ -49,7 +49,7 @@ const recognizeObserver = new MutationObserver(async function (
       faceapi.LabeledFaceDescriptors.fromJSON(item)
     );
 
-    // const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
 
     const videoTrack = recognizeFaceStream.getVideoTracks()[0];
     const imageCapture = new ImageCapture(videoTrack);
@@ -77,19 +77,13 @@ const recognizeObserver = new MutationObserver(async function (
           .withFaceLandmarks()
           .withFaceDescriptors();
 
+        detections.forEach((fd) => faceMatcher.findBestMatch(fd.descriptor));
+
         const resizedDetections = faceapi.resizeResults(
           detections,
           displaySize
         );
 
-        const results2 = await faceapi
-          .detectAllFaces(image)
-          .withFaceLandmarks()
-          .withFaceDescriptors();
-        if (!results2.length) {
-          return;
-        }
-        const faceMatcher = new faceapi.FaceMatcher(results2);
         const results = resizedDetections.map((d) =>
           faceMatcher.findBestMatch(d.descriptor)
         );
