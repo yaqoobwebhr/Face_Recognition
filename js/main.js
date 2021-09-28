@@ -154,7 +154,7 @@ const observer = new MutationObserver(async function (mutationRecords) {
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawDetections(canvas, resizedDetections);
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-        faceapi.draw.drawFaceExpressions(canvas, resizedDetections, 0.5);
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections, 0.05);
       }, 100);
     }
   } else {
