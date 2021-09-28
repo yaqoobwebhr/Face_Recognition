@@ -42,7 +42,7 @@ async function startup(faces) {
     .flat()
     .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
 
-  faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.5);
+  faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.2);
 
   setInterval(async function () {
     document.querySelectorAll(".canvas-result").forEach((el) => el.remove());
