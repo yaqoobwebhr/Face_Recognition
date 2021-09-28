@@ -49,7 +49,7 @@ const recognizeObserver = new MutationObserver(async function (
       faceapi.LabeledFaceDescriptors.fromJSON(item)
     );
 
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.9);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
 
     const videoTrack = recognizeFaceStream.getVideoTracks()[0];
     const imageCapture = new ImageCapture(videoTrack);
