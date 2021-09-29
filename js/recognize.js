@@ -68,7 +68,7 @@ async function startup(faces) {
     faceapi.draw.drawDetections(canvas, detections2);
     faceapi.draw.drawFaceLandmarks(canvas, detections2);
     faceapi.draw.drawFaceExpressions(canvas, detections2);
-    faceapi.draw.FaceExpressionNet(canvas, detections2);
+
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
@@ -80,7 +80,7 @@ async function startup(faces) {
     }));
 
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
-
+    faceapi.draw.FaceExpressionNet(canvas, results);
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
