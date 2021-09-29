@@ -52,6 +52,7 @@ async function startup(faces) {
     canvas.style.top = 0;
     canvas.style.left = 0;
     faceapi.matchDimensions(canvas, displaySize);
+    faceapi.draw.drawFaceExpressions(canvas, labeledFaceDescriptors);
     container.append(canvas);
 
     const detections = await faceapi
@@ -80,7 +81,6 @@ async function startup(faces) {
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
       });
-      faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
       drawBox.draw(canvas);
     });
   }, 500);
