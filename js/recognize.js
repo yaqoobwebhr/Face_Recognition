@@ -63,7 +63,7 @@ async function startup(faces) {
       .withFaceDescriptors();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    //faceapi.draw.drawFaceExpressions(canvas, detections);
+
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
@@ -80,7 +80,7 @@ async function startup(faces) {
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
       });
-
+      faceapi.draw.drawFaceExpressions(canvas, results);
       drawBox.draw(canvas);
     });
   }, 500);
