@@ -13,7 +13,6 @@ Promise.all([
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
-const testing = document.getElementById("testing");
 
 let startupDone = false;
 let stream;
@@ -42,7 +41,7 @@ async function startup(faces) {
   const labeledFaceDescriptors = faces
     .flat()
     .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
-  testing.innerHTML = labeledFaceDescriptors;
+
   faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
 
   setInterval(async function () {
