@@ -61,26 +61,26 @@ async function startup(faces) {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
-    const detections2 = await faceapi
-      .detectAllFaces(video)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-    faceapi.draw.drawDetections(canvas, detections2);
-    faceapi.draw.drawFaceLandmarks(canvas, detections2);
-    faceapi.draw.drawFaceExpressions(canvas, detections2);
-
+    // const detections2 = await faceapi
+    //   .detectAllFaces(video)
+    //   .withFaceLandmarks()
+    //   .withFaceDescriptors();
+    // faceapi.draw.drawDetections(canvas, detections2);
+    // faceapi.draw.drawFaceLandmarks(canvas, detections2);
+    // faceapi.draw.drawFaceExpressions(canvas, detections2);
+    // faceapi.draw.FaceExpressionNet(canvas, results);
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-    testing.innerHTML = results;
+
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
     }));
-
+    testing.innerHTML = payload;
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
-    faceapi.draw.FaceExpressionNet(canvas, results);
+
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
