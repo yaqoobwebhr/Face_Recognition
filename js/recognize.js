@@ -38,28 +38,9 @@ async function startup(faces) {
     height: video.height,
   };
 
-  // const labeledFaceDescriptors = faces
-  //   .flat()
-  //   .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
-
-  const labeledFaceDescriptors = await Promise.all(
-    labels.map(async (label) => {
-      const imgUrl = `images/${label}.jpg`;
-      const img = await faceapi.fetchImage(imgUrl);
-
-      const faceDescription = await faceapi
-        .detectSingleFace(img)
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-
-      if (!faceDescription) {
-        throw new Error(`no faces detected for ${label}`);
-      }
-
-      const faceDescriptors = [faceDescription.descriptor];
-      return new faceapi.LabeledFaceDescriptors(label, faceDescriptors);
-    })
-  );
+  const labeledFaceDescriptors = faces
+    .flat()
+    .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
 
   faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
   setInterval(async function () {
@@ -88,10 +69,15 @@ async function startup(faces) {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
+    // const detections2 = await faceapi
+    //   .detectAllFaces(video)
+    //   .withFaceLandmarks()
+    //   .withFaceDescriptors();
+    // faceapi.draw.drawDetections(canvas, detections2);
+    // faceapi.draw.drawFaceLandmarks(canvas, detections2);
+    // faceapi.draw.drawFaceExpressions(canvas, detections2);
+    // faceapi.draw.FaceExpressionNet(canvas, results);
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    faceapi.draw.drawDetections(canvas, detections);
-    faceapi.draw.drawFaceLandmarks(canvas, detections);
-    faceapi.draw.drawFaceExpressions(canvas, detections);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
