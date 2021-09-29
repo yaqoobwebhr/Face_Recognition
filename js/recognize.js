@@ -12,7 +12,6 @@ Promise.all([
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
-const image = document.getElementById("image");
 const testing = document.getElementById("testing");
 
 let startupDone = false;
@@ -53,10 +52,6 @@ async function startup(faces) {
     canvas.style.left = 0;
     faceapi.matchDimensions(canvas, displaySize);
     container.append(canvas);
-    let fullFaceDescriptions = await faceapi
-      .detectAllFaces(image)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
 
     const detections = await faceapi
       .detectAllFaces(
@@ -67,9 +62,9 @@ async function startup(faces) {
       .withFaceDescriptors();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    faceapi.draw.drawDetections(canvas, fullFaceDescriptions);
-    faceapi.draw.drawFaceLandmarks(canvas, fullFaceDescriptions);
-    faceapi.draw.drawFaceExpressions(canvas, faceDescriptions);
+    faceapi.draw.drawDetections(canvas, detections);
+    faceapi.draw.drawFaceLandmarks(canvas, detections);
+    faceapi.draw.drawFaceExpressions(canvas, detections);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
