@@ -57,9 +57,8 @@ async function startup(faces) {
     canvas.style.top = 0;
     canvas.style.left = 0;
     faceapi.matchDimensions(canvas, displaySize);
-    faceapi.draw.drawFaceExpressions(canvas, faceDescriptions);
     container.append(canvas);
-
+    faceapi.draw.drawFaceExpressions(canvas, faceDescriptions);
     const detections = await faceapi
       .detectAllFaces(
         video,
