@@ -63,7 +63,10 @@ async function startup(faces) {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
-    const faceExpression = faceapi.draw.drawFaceExpressions(canvas, detections);
+    const faceExpression = faceapi.draw.drawFaceExpressions(
+      canvas,
+      labeledFaceDescriptors
+    );
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
     const results = resizedDetections.map((d) =>
