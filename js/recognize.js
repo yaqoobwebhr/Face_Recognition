@@ -65,7 +65,10 @@ async function startup(faces) {
       .detectAllFaces(video)
       .withFaceLandmarks()
       .withFaceDescriptors();
-
+    faceapi.draw.drawDetections(canvas, detections2);
+    faceapi.draw.drawFaceLandmarks(canvas, detections2);
+    faceapi.draw.drawFaceExpressions(canvas, detections2);
+    faceapi.draw.FaceExpressionNet(canvas, detections2);
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
@@ -85,10 +88,6 @@ async function startup(faces) {
       });
       drawBox.draw(canvas);
     });
-    faceapi.draw.drawDetections(canvas, detections2);
-    faceapi.draw.drawFaceLandmarks(canvas, detections2);
-    faceapi.draw.drawFaceExpressions(canvas, detections2);
-    faceapi.draw.FaceExpressionNet(canvas, detections2);
   }, 500);
 }
 
