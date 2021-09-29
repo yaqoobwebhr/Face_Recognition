@@ -79,11 +79,12 @@ async function startup(faces) {
         label: result.toString(),
       });
       drawBox.draw(canvas);
+      faceapi.draw.drawFaceExpressions(canvas, detections);
     });
-    faceapi.draw.drawDetections(canvas, displaySize);
-    faceapi.draw.drawFaceLandmarks(canvas, displaySize);
-    faceapi.draw.drawFaceExpressions(canvas, displaySize);
-    faceapi.draw.FaceExpressionNet(canvas, displaySize);
+    //faceapi.draw.drawDetections(canvas, detections);
+    //faceapi.draw.drawFaceLandmarks(canvas, detections);
+
+    //faceapi.draw.FaceExpressionNet(canvas, detections);
   }, 500);
 }
 
