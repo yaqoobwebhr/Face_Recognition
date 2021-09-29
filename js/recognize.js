@@ -62,9 +62,6 @@ async function startup(faces) {
       .withFaceDescriptors();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    faceapi.draw.drawDetections(canvas, detections);
-    faceapi.draw.drawFaceLandmarks(canvas, detections);
-    faceapi.draw.drawFaceExpressions(canvas, detections);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
@@ -83,6 +80,9 @@ async function startup(faces) {
       });
       drawBox.draw(canvas);
     });
+    faceapi.draw.drawDetections(canvas, detections);
+    faceapi.draw.drawFaceLandmarks(canvas, detections);
+    faceapi.draw.drawFaceExpressions(canvas, detections);
   }, 500);
 }
 
