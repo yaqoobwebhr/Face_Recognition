@@ -63,7 +63,7 @@ async function startup(faces) {
       .withFaceDescriptors();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
+    faceapi.draw.drawFaceExpressions(canvas, detections);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
