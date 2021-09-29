@@ -12,11 +12,6 @@ Promise.all([
 
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
-let faceDescriptions = await faceapi
-  .detectAllFaces(video)
-  .withFaceLandmarks()
-  .withFaceDescriptors()
-  .withFaceExpressions();
 const container = document.getElementById("container");
 const testing = document.getElementById("testing");
 
@@ -58,7 +53,7 @@ async function startup(faces) {
     canvas.style.left = 0;
     faceapi.matchDimensions(canvas, displaySize);
     container.append(canvas);
-    faceapi.draw.drawFaceExpressions(canvas, faceDescriptions);
+
     const detections = await faceapi
       .detectAllFaces(
         video,
