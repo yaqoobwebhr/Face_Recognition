@@ -64,11 +64,10 @@ async function startup(faces) {
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-    const results = resizedDetections.map((d) => {
-      testing.innerHTML = d.descriptor;
-      faceMatcher.findBestMatch(d.descriptor);
-    });
-
+    const results = resizedDetections.map((d) =>
+      faceMatcher.findBestMatch(d.descriptor)
+    );
+    testing.innerHTML = results;
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
