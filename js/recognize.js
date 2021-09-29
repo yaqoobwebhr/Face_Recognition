@@ -84,16 +84,6 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-    faceapi.drawDetection(
-      "overlay",
-      results.map((res) => res.faceDetection),
-      { withScore: false }
-    );
-    faceapi.drawLandmarks(
-      "overlay",
-      results.map((res) => res.faceLandmarks),
-      { lineWidth: 4, color: "red" }
-    );
 
     testing.innerHTML = results;
     const payload = results.map((item) => ({
@@ -109,6 +99,16 @@ async function startup(faces) {
         label: result.toString(),
       });
       drawBox.draw(canvas);
+      faceapi.drawDetection(
+        "overlay",
+        results.map((res) => res.faceDetection),
+        { withScore: false }
+      );
+      faceapi.drawLandmarks(
+        "overlay",
+        results.map((res) => res.faceLandmarks),
+        { lineWidth: 4, color: "red" }
+      );
     });
   }, 500);
 }
