@@ -42,7 +42,7 @@ async function startup(faces) {
   const labeledFaceDescriptors = faces
     .flat()
     .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
-  testing.innerHTML = "212131";
+  testing.innerHTML = labeledFaceDescriptors;
   faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
 
   setInterval(async function () {
