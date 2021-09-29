@@ -68,9 +68,10 @@ async function startup(faces) {
         new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
       )
       .withFaceLandmarks()
-      .withFaceDescriptors()
-      .withFaceExpressions()
-      .withAgeAndGender();
+      .withFaceDescriptors();
+
+    // .withFaceExpressions()
+    // .withAgeAndGender()
 
     // const detections2 = await faceapi
     //   .detectAllFaces(video)
