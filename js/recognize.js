@@ -44,7 +44,6 @@ async function startup(faces) {
     .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
 
   faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
-  testing.innerHTML = faceMatcher.data;
   setInterval(async function () {
     document.querySelectorAll(".canvas-result").forEach((el) => el.remove());
     let canvas = document.createElement("canvas");
@@ -65,9 +64,10 @@ async function startup(faces) {
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-    const results = resizedDetections.map((d) =>
-      faceMatcher.findBestMatch(d.descriptor)
-    );
+    const results = resizedDetections.map((d) => {
+      testing.innerHTML = d.descriptor;
+      faceMatcher.findBestMatch(d.descriptor);
+    });
 
     const payload = results.map((item) => ({
       label: item.label,
