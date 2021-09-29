@@ -4,7 +4,6 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/Face_Recognition/models"),
   faceapi.nets.faceExpressionNet.loadFromUri("/Face_Recognition/models"),
   faceapi.nets.ssdMobilenetv1.loadFromUri("/Face_Recognition/models"),
-  // faceapi.nets.ageGenderNet.loadFromUri("/Face_Recognition/models"),
 ])
   .then(() => console.log("Face API is ready!"))
   .catch((error) => {
@@ -85,6 +84,17 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
+    faceapi.drawDetection(
+      "overlay",
+      results.map((res) => res.faceDetection),
+      { withScore: false }
+    );
+    faceapi.drawLandmarks(
+      "overlay",
+      results.map((res) => res.faceLandmarks),
+      { lineWidth: 4, color: "red" }
+    );
+
     testing.innerHTML = results;
     const payload = results.map((item) => ({
       label: item.label,
