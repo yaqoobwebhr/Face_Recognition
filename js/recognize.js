@@ -68,8 +68,7 @@ async function startup(faces) {
         new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
       )
       .withFaceLandmarks()
-      .withFaceDescriptors()
-      .withAgeAndGender();
+      .withFaceDescriptors();
 
     // .withFaceExpressions()
     // .withAgeAndGender()
