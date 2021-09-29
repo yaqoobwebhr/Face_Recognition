@@ -80,7 +80,7 @@ async function startup(faces) {
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
       });
-      faceapi.draw.drawFaceExpressions(canvas, results);
+      faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
       drawBox.draw(canvas);
     });
   }, 500);
