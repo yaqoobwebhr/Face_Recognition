@@ -4,6 +4,7 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/Face_Recognition/models"),
   faceapi.nets.faceExpressionNet.loadFromUri("/Face_Recognition/models"),
   faceapi.nets.ssdMobilenetv1.loadFromUri("/Face_Recognition/models"),
+  faceapi.nets.ageGenderNet.loadFromUri("/Face_Recognition/models"),
 ])
   .then(() => console.log("Face API is ready!"))
   .catch((error) => {
@@ -53,13 +54,19 @@ async function startup(faces) {
     faceapi.matchDimensions(canvas, displaySize);
     container.append(canvas);
 
+    // const detections = await faceapi
+    //   .detectAllFaces(
+    //     video,
+    //     new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
+    //   )
+    //   .withFaceLandmarks()
+    //   .withFaceDescriptors();
+
     const detections = await faceapi
-      .detectAllFaces(
-        video,
-        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
-      )
+      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
-      .withFaceDescriptors();
+      .withFaceExpressions()
+      .withAgeAndGender();
 
     // const detections2 = await faceapi
     //   .detectAllFaces(video)
@@ -73,12 +80,12 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-
+    testing.innerHTML = results;
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
     }));
-    testing.innerHTML = payload;
+
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
     results.forEach((result, i) => {
