@@ -13,7 +13,15 @@ Promise.all([
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
 const testing = document.getElementById("testing");
-const labels = ["ross", "rachel", "chandler", "monica", "phoebe", "joey"];
+const FACE_EXPRESSION_LABELS = [
+  "neutral",
+  "happy",
+  "sad",
+  "angry",
+  "fearful",
+  "disgusted",
+  "surprised",
+];
 let startupDone = false;
 let stream;
 let faceMatcher = null;
@@ -69,15 +77,10 @@ async function startup(faces) {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
-    // const detections2 = await faceapi
-    //   .detectAllFaces(video)
-    //   .withFaceLandmarks()
-    //   .withFaceDescriptors();
-    // faceapi.draw.drawDetections(canvas, detections2);
-    // faceapi.draw.drawFaceLandmarks(canvas, detections2);
-    // faceapi.draw.drawFaceExpressions(canvas, detections2);
-    // faceapi.draw.FaceExpressionNet(canvas, results);
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    faceapi.draw.drawDetections(canvas, resizedDetections); //to draw box around detection
+    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections); //to draw face landmarks
+    faceapi.draw.drawFaceExpressions(canvas, resizedDetections); //
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
