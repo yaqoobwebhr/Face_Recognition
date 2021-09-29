@@ -56,8 +56,13 @@ async function startup(faces) {
     const detections = await faceapi
       .detectAllFaces(
         video,
-        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.4 })
+        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
       )
+      .withFaceLandmarks()
+      .withFaceDescriptors();
+
+    const detections2 = await faceapi
+      .detectAllFaces(video)
       .withFaceLandmarks()
       .withFaceDescriptors();
 
@@ -80,10 +85,10 @@ async function startup(faces) {
       });
       drawBox.draw(canvas);
     });
-    faceapi.draw.drawDetections(canvas, detections);
-    faceapi.draw.drawFaceLandmarks(canvas, detections);
-    faceapi.draw.drawFaceExpressions(canvas, detections);
-    faceapi.draw.FaceExpressionNet(canvas, detections);
+    faceapi.draw.drawDetections(canvas, detections2);
+    faceapi.draw.drawFaceLandmarks(canvas, detections2);
+    faceapi.draw.drawFaceExpressions(canvas, detections2);
+    faceapi.draw.FaceExpressionNet(canvas, detections2);
   }, 500);
 }
 
