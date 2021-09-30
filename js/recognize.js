@@ -76,7 +76,6 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-    results.map((item) => (testing.innerHTML = item.LabeledFaceDescriptors));
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
@@ -86,6 +85,7 @@ async function startup(faces) {
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
     results.forEach((result, i) => {
+      testing.innerHTML = results.LabeledFaceDescriptors;
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
