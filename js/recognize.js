@@ -77,10 +77,10 @@ async function startup(faces) {
       )
       .withFaceLandmarks()
       .withFaceDescriptors()
+      .withFaceExpressions()
       .withAgeAndGender();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
@@ -93,17 +93,17 @@ async function startup(faces) {
 
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
-    // results.forEach((result, i) => {
-    //   const box = resizedDetections[i].detection.box;
-    //   const drawBox = new faceapi.draw.DrawBox(box, {
-    //     label: result.toString(),
-    //   });
-    //   drawBox.draw(canvas);
-    // });
+    results.forEach((result, i) => {
+      const box = resizedDetections[i].detection.box;
+      const drawBox = new faceapi.draw.DrawBox(box, {
+        label: result.toString(),
+      });
+      drawBox.draw(canvas);
+    });
     resizedDetections.forEach((detection) => {
       const box = detection.detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        label: Math.round(detection.age) + " year \n" + detection.gender,
+        label: `${Math.round(detection.age)} Year ${detection.gender}`,
       });
       drawBox.draw(canvas);
     });
