@@ -95,12 +95,12 @@ async function startup(faces) {
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        //label: result.toString(),
+        label: result.toString(),
       });
       drawBox.draw(canvas);
     });
     resizedDetections.forEach((detection) => {
-      const box = detection.detection.box;
+      const box = detection.detection.box.bottomRight;
       const { age, gender, genderProbability } = detection;
       testing.innerHTML = age;
       const drawBox = new faceapi.draw.DrawBox(box, {
