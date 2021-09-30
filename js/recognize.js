@@ -14,15 +14,7 @@ Promise.all([
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
 //const testing = document.getElementById("testing");
-const FACE_EXPRESSION_LABELS = [
-  "neutral",
-  "happy",
-  "sad",
-  "angry",
-  "fearful",
-  "disgusted",
-  "surprised",
-];
+
 let startupDone = false;
 let stream;
 let faceMatcher = null;
@@ -62,14 +54,6 @@ async function startup(faces) {
     faceapi.matchDimensions(canvas, displaySize);
     container.append(canvas);
 
-    // const detections = await faceapi
-    //   .detectAllFaces(
-    //     video,
-    //     new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
-    //   )
-    //   .withFaceLandmarks()
-    //   .withFaceDescriptors();
-
     const detections = await faceapi
       .detectAllFaces(
         video,
@@ -100,18 +84,8 @@ async function startup(faces) {
       drawBox.draw(canvas);
     });
 
-    // resizedDetections.forEach((detection) => {
-    //   const box = detection.detection.box;
-    //   const { age, gender, genderProbability } = detection;
-    //   testing.innerHTML = age;
-    //   const drawBox = new faceapi.draw.DrawBox(box, {
-    //     label: `${Math.round(age)} Years ${gender}`,
-    //   });
-    //   drawBox.draw(canvas);
-    // });
     resizedDetections.forEach((result) => {
       const { age, gender, genderProbability } = result;
-      // testing.innerHTML = Math.round(age);
       new faceapi.draw.DrawTextField(
         [
           `${Math.round(age)} years`,
