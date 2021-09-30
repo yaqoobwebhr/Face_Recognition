@@ -76,7 +76,8 @@ async function startup(faces) {
         new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
       )
       .withFaceLandmarks()
-      .withFaceDescriptors();
+      .withFaceDescriptors()
+      .withAgeAndGender();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     const results = resizedDetections.map((d) =>
