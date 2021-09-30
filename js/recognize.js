@@ -83,16 +83,16 @@ async function startup(faces) {
       drawBox.draw(canvas);
     });
 
-    resizedDetections.forEach((result) => {
-      const { age, gender, genderProbability } = result;
-      new faceapi.draw.DrawTextField(
-        [
-          `${Math.round(age)} years`,
-          `${gender} (${Math.round(genderProbability)})`,
-        ],
-        result.detection.box.bottomRight
-      ).draw(canvas);
-    });
+    // resizedDetections.forEach((result) => {
+    //   const { age, gender, genderProbability } = result;
+    //   new faceapi.draw.DrawTextField(
+    //     [
+    //       `${Math.round(age)} years`,
+    //       `${gender} (${Math.round(genderProbability)})`,
+    //     ],
+    //     result.detection.box.bottomRight
+    //   ).draw(canvas);
+    // });
     faceapi.draw.drawDetections(canvas, resizedDetections);
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
