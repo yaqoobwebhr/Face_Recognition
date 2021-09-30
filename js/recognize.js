@@ -85,7 +85,6 @@ async function startup(faces) {
       faceMatcher.findBestMatch(d.descriptor)
     );
 
-    testing.innerHTML = results;
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
@@ -103,8 +102,9 @@ async function startup(faces) {
     resizedDetections.forEach((detection) => {
       const box = detection.detection.box;
       const { age, gender, genderProbability } = detection;
+      testing.innerHTML = age;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        label: `${faceapi.round(age, 0)} Years ${detection.gender}`,
+        label: `${Math.round(detection.age)} Year ${detection.gender}`,
       });
       drawBox.draw(canvas);
     });
