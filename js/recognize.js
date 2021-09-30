@@ -80,6 +80,7 @@ async function startup(faces) {
       .withAgeAndGender();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
