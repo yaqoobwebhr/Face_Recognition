@@ -13,7 +13,7 @@ Promise.all([
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
-const testing = document.getElementById("testing");
+//const testing = document.getElementById("testing");
 const FACE_EXPRESSION_LABELS = [
   "neutral",
   "happy",
@@ -111,7 +111,7 @@ async function startup(faces) {
     // });
     resizedDetections.forEach((result) => {
       const { age, gender, genderProbability } = result;
-      testing.innerHTML = Math.round(age);
+      // testing.innerHTML = Math.round(age);
       new faceapi.draw.DrawTextField(
         [
           `${Math.round(age)} years`,
