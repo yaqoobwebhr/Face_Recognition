@@ -75,24 +75,24 @@ async function startup(faces) {
 
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
-    results.forEach((result, i) => {
-      const box = resizedDetections[i].detection.box;
-      const drawBox = new faceapi.draw.DrawBox(box, {
-        label: result.toString(),
-      });
-      drawBox.draw(canvas);
-    });
-
-    // resizedDetections.forEach((result) => {
-    //   const { age, gender, genderProbability } = result;
-    //   new faceapi.draw.DrawTextField(
-    //     [
-    //       `${Math.round(age)} years`,
-    //       `${gender} (${Math.round(genderProbability)})`,
-    //     ],
-    //     result.detection.box.bottomRight
-    //   ).draw(canvas);
+    // results.forEach((result, i) => {
+    //   const box = resizedDetections[i].detection.box;
+    //   const drawBox = new faceapi.draw.DrawBox(box, {
+    //     label: result.toString(),
+    //   });
+    //   drawBox.draw(canvas);
     // });
+
+    resizedDetections.forEach((result) => {
+      const { age, gender, genderProbability } = result;
+      new faceapi.draw.DrawTextField(
+        [
+          `${Math.round(age)} years`,
+          `${gender} (${Math.round(genderProbability)})`,
+        ],
+        result.detection.box.bottomRight
+      ).draw(canvas);
+    });
     faceapi.draw.drawDetections(canvas, resizedDetections);
     faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
     faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
