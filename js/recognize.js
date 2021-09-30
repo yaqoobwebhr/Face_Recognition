@@ -95,7 +95,7 @@ async function startup(faces) {
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        label: result.toString(),
+        label: "", //result.toString(),
       });
       drawBox.draw(canvas);
     });
