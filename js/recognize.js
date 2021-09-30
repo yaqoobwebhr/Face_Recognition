@@ -71,7 +71,10 @@ async function startup(faces) {
     //   .withFaceDescriptors();
 
     const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+      .detectAllFaces(
+        video,
+        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
+      )
       .withFaceLandmarks()
       .withFaceDescriptors()
       .withAgeAndGender();
@@ -92,10 +95,7 @@ async function startup(faces) {
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        label:
-          Math.round(result.age) +
-          " year old " +
-          resizedDetections[i].detection.gender, //result.toString(),
+        label: Math.round(result.age) + " year old " + result.gender, //result.toString(),
       });
       drawBox.draw(canvas);
     });
