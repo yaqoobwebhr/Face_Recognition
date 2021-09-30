@@ -103,7 +103,7 @@ async function startup(faces) {
     resizedDetections.forEach((result) => {
       const { age, gender, genderProbability } = result;
       new faceapi.draw.DrawTextField(
-        [`${Math.round(age)} years`, `${gender} (${genderProbability})`],
+        [`${Math.round(age)} years`, `${gender}`],
         result.detection.box.bottomRight
       ).draw(canvas);
     });
