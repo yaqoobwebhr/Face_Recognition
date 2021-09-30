@@ -76,7 +76,7 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-    results.map((item) => (testing.innerHTML = item.gender));
+    results.map((item) => (testing.innerHTML = item.LabeledFaceDescriptors));
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
