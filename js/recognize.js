@@ -104,6 +104,7 @@ async function startup(faces) {
 
     resizedDetections.forEach((detection) => {
       const box = detection.detection.box.bottomRight;
+      const { age, gender, genderProbability } = detection;
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: `${Math.round(age)} Years ${gender}`,
       });
