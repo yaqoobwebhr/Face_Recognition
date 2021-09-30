@@ -13,7 +13,6 @@ Promise.all([
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
-//const testing = document.getElementById("testing");
 
 let startupDone = false;
 let stream;
