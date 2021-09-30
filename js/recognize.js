@@ -104,7 +104,7 @@ async function startup(faces) {
       const { age, gender, genderProbability } = detection;
       testing.innerHTML = age;
       const drawBox = new faceapi.draw.DrawBox(box, {
-        label: `${Math.round(detection.age)} Year ${detection.gender}`,
+        label: `${Math.round(age)} Year ${detection.gender}`,
       });
       drawBox.draw(canvas);
     });
