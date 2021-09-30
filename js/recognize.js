@@ -13,6 +13,7 @@ Promise.all([
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
+const testing = document.getElementById("testing");
 
 let startupDone = false;
 let stream;
@@ -75,10 +76,11 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-
+    results.map((item) => (testing.innerHTML = item.gender));
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
+      gender: item.gender,
     }));
 
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
