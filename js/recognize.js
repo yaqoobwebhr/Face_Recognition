@@ -81,10 +81,17 @@ async function startup(faces) {
       distance: item.distance,
     }));
 
-    if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
+    const payload2 = resizedDetections.map((item) => ({
+      age: item.age,
+      gender: item.gender,
+      genderProbability: item.genderProbability,
+    }));
+
+    if (payload.length > 0 && payload2.length > 0)
+      Emitter.emit(Events.FACE_FOUND, { data: payload, payload2 });
 
     results.forEach((result, i) => {
-      testing.innerHTML = result.resizedDetections;
+      //testing.innerHTML = result.resizedDetections;
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
