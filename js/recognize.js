@@ -86,7 +86,7 @@ async function startup(faces) {
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
-      data: resizedDetections,
+      data: resizedDetections[0].expressions,
     }));
 
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
