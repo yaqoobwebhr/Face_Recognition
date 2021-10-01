@@ -76,20 +76,21 @@ async function startup(faces) {
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
-    const payload = results.map((item) => ({
-      label: item.label,
-      distance: item.distance,
-    }));
 
     const payload2 = resizedDetections.map((item) => ({
       age: item.age,
       gender: item.gender,
       genderProbability: item.genderProbability,
-      ...payload,
+    }));
+
+    const payload = results.map((item) => ({
+      label: item.label,
+      distance: item.distance,
+      ...payload2,
     }));
 
     if (payload.length > 0 && payload2.length > 0)
-      Emitter.emit(Events.FACE_FOUND, { data: payload2 });
+      Emitter.emit(Events.FACE_FOUND, { data: payload });
 
     results.forEach((result, i) => {
       //testing.innerHTML = result.resizedDetections;
