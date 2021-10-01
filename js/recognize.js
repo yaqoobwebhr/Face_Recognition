@@ -84,7 +84,7 @@ async function startup(faces) {
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
     results.forEach((result, i) => {
-      testing.innerHTML = result.resizedDetections.age;
+      testing.innerHTML = result.resizedDetections;
       const box = resizedDetections[i].detection.box;
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
