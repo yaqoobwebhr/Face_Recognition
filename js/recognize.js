@@ -86,11 +86,10 @@ async function startup(faces) {
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
-      ...payload2,
+      // ...payload2,
     }));
 
-    if (payload.length > 0 && payload2.length > 0)
-      Emitter.emit(Events.FACE_FOUND, { data: payload });
+    if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
 
     results.forEach((result, i) => {
       //testing.innerHTML = result.resizedDetections;
