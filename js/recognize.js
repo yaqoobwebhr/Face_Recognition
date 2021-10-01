@@ -85,10 +85,11 @@ async function startup(faces) {
       age: item.age,
       gender: item.gender,
       genderProbability: item.genderProbability,
+      ...payload,
     }));
 
     if (payload.length > 0 && payload2.length > 0)
-      Emitter.emit(Events.FACE_FOUND, { data: payload, payload2 });
+      Emitter.emit(Events.FACE_FOUND, { data: payload2 });
 
     results.forEach((result, i) => {
       //testing.innerHTML = result.resizedDetections;
