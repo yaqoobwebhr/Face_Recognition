@@ -4,12 +4,12 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/Face_Recognition/models"),
   faceapi.nets.faceExpressionNet.loadFromUri("/Face_Recognition/models"),
   faceapi.nets.ssdMobilenetv1.loadFromUri("/Face_Recognition/models"),
+  faceapi.nets.ageGenderNet.loadFromUri("/Face_Recognition/models"),
 ])
   .then(() => console.log("Face API is ready!"))
   .catch((error) => {
     Emitter.emit(Events.ERROR, { error: "Errors loading models" });
   });
-
 // DOM ELEMENTS
 const video = document.getElementById("video-element");
 const container = document.getElementById("container");
@@ -42,8 +42,7 @@ async function startup(faces) {
     .flat()
     .map((item) => faceapi.LabeledFaceDescriptors.fromJSON(item));
 
-  faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
-
+  faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
   setInterval(async function () {
     document.querySelectorAll(".canvas-result").forEach((el) => el.remove());
     let canvas = document.createElement("canvas");
@@ -60,10 +59,11 @@ async function startup(faces) {
         new faceapi.SsdMobilenetv1Options({ minConfidence: 0.9 })
       )
       .withFaceLandmarks()
-      .withFaceDescriptors();
+      .withFaceDescriptors()
+      .withFaceExpressions()
+      .withAgeAndGender();
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
     const results = resizedDetections.map((d) =>
       faceMatcher.findBestMatch(d.descriptor)
     );
@@ -71,6 +71,10 @@ async function startup(faces) {
     const payload = results.map((item) => ({
       label: item.label,
       distance: item.distance,
+      expressions: resizedDetections[0].expressions,
+      gender: resizedDetections[0].gender,
+      genderProbability: resizedDetections[0].genderProbability,
+      age: resizedDetections[0].age,
     }));
 
     if (payload.length > 0) Emitter.emit(Events.FACE_FOUND, { data: payload });
@@ -80,9 +84,19 @@ async function startup(faces) {
       const drawBox = new faceapi.draw.DrawBox(box, {
         label: result.toString(),
       });
-
       drawBox.draw(canvas);
     });
+
+    resizedDetections.forEach((result) => {
+      const { age, gender, genderProbability } = result;
+      new faceapi.draw.DrawTextField(
+        [`${Math.round(age)} years`, `${gender}`],
+        result.detection.box.bottomRight
+      ).draw(canvas);
+    });
+    faceapi.draw.drawDetections(canvas, resizedDetections);
+    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+    faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
   }, 500);
 }
 
